@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Track Your Pool!</h1>
+        <div class="button-container">
+            <a href="{{ url_for('search_event') }}" class="big-button">Search Event</a>
+            <a href="{{ url_for('my_events') }}" class="big-button">My Events</a>
+            <a href="{{ url_for('my_account') }}" class="big-button">My Account</a>
+            <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+        </div>
+    </div>
+</body>
+</html>

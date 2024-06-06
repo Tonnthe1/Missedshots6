@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Event</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        function switchColumns(columns) {
+            const eventBlocks = document.querySelectorAll('.event-block');
+            eventBlocks.forEach(block => {
+                if (columns === 1) {
+                    block.classList.add('single-column');
+                } else {
+                    block.classList.remove('single-column');
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- Move the return home button to be above the search event section -->
+    <div class="container">
+        <a href="{{ url_for('home') }}" class="return-home-button">Return to Home</a>
+        <div class="search-event-section">
+            <h2>Search Event</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="alerts">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <form method="POST" action="{{ url_for('search_event') }}">
+                <div class="form-group">
+                    <label for="query">Search for an event</label>
+                    <input type="text" id="query" name="query" placeholder="Enter event name or tags" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Search</button>
+                </div>
+            </form>
+            <div class="create-event-link">
+                <a href="{{ url_for('create_event') }}">Can't find your event? Create it here!</a>
+            </div>
+        </div>
+        <div class="column-switch">
+            <button onclick="switchColumns(1)">1 Column</button>
+            <button onclick="switchColumns(3)">3 Columns</button>
+        </div>
+        <div class="event-list">
+            {% if events %}
+                <h3>Search Results</h3>
+                <div class="events">
+                    {% for event in events %}
+                        <div class="event-block">
+                            <a href="{{ url_for('view_event', event_id=event.id) }}">
+                                {% if event.image_url %}
+                                    <img src="{{ event.image_url }}" alt="{{ event.name }}">
+                                {% else %}
+                                    <div class="no-image"></div>
+                                {% endif %}
+                                <div class="event-details">
+                                    <h4>{{ event.name }}</h4>
+                                    <p>{{ event.time.strftime('%A, %B %d, %Y %I:%M %p') }}</p>
+                                    <p>{{ event.address }}</p>
+                                    <p>{{ event.tags }}</p>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
